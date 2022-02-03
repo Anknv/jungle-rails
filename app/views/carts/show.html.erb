@@ -4,6 +4,7 @@
     <h1>My Cart</h1>
   </header>
 
+  <% if not enhanced_cart.empty? %>
   <div class="panel panel-default items">
     <table class="table table-bordered">
       <thead>
@@ -25,7 +26,7 @@
             TOTAL:
           </th>
           <th>
-            <%= cart_subtotal_cents / 100.0 %>
+            <%= humanized_money_with_symbol cart_subtotal_cents / 100.0 %>
           </th>
         </tr>
       </tfoot>
@@ -48,5 +49,7 @@
       <% end %>
     </div>
   </div>
-
-</section>
+<% else %>
+  <h3 class="alert">Your bag is empty. We know how to fix that. Go <a href="/">HERE</a> to start shopping!</h3>
+<% end %>
+  </section>
