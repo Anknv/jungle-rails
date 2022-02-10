@@ -2,7 +2,7 @@ require 'rails_helper'
 
 RSpec.describe User, type: :model do
 
-  subject {described_class.new(:first_name => 'Anna', :last_name => 'Kon', :email => 'anna@gmail.com', :password => "123", :password_confirmation => "123", :password_digest => "777")}
+  subject {described_class.new(:first_name => 'Anna', :last_name => 'Kon', :email => 'anna@gmail.com', :password => "123", :password_confirmation => "123")}
 
   describe 'Validations do' do
 
@@ -48,7 +48,7 @@ RSpec.describe User, type: :model do
     end
 
     it 'fails to save when email is not unique (not case sensitive)' do
-      User.create(:first_name => 'Anna', :last_name => 'Kon', :email => 'anna@gmail.com', :password => "123", :password_confirmation => "123", :password_digest => "777")
+      User.create(:first_name => 'Anna', :last_name => 'Kon', :email => 'anna@gmail.com', :password => "123", :password_confirmation => "123")
       subject.valid?
       expect(subject.errors).not_to be_empty
     end
@@ -62,23 +62,26 @@ RSpec.describe User, type: :model do
 
     describe '.authenticate_with_credentials' do
       it 'returns user if succesfully authenticated' do
+        subject.save
         user = User.authenticate_with_credentials('anna@gmail.com', '123')
-        expect(subject).eql? user
+        expect(subject).to be == user
       end
 
       it 'returns nil if not successfully authenticated' do
+        subject.save
         user = User.authenticate_with_credentials('anna@gmail.com', '111')
-        expect(user).eql? nil
+        expect(user).to be == nil
       end
 
       it 'authenticates if user type white space before and/or after email' do
         user = User.authenticate_with_credentials(' anna@gmail.com ', '123')
-        expect(subject).eql? user
+        expect(subject).to be == user
       end
 
       it 'authenticates if users type lower and/or upper case in email' do
+        subject.save
         user = User.authenticate_with_credentials('AnNA@gMAiL.com', '123')
-        expect(subject).eql? user
+        expect(subject).to be == user
       end
     end
   end
